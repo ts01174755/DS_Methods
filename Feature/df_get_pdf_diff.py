@@ -48,8 +48,8 @@ def df_get_pdf_diff(df, feature, cla_col, cla_val,Interval):
 #%%
 if __name__ == "__main__":
     mu, sigma = 10, 5
-    s1 = st.norm(mu, sigma).rvs(100000)
-    s2 = st.norm(mu-4, sigma+4).rvs(10000)
+    s1 = st.norm(mu, sigma).rvs(1000)
+    s2 = st.norm(mu-4, sigma+4).rvs(1000)
 
     df_1 = pd.DataFrame(s1,columns=["feat"]  )
     df_1['Y'] = 0
