@@ -6,11 +6,9 @@ import copy
 from collections import deque
 from pandas.core.frame import DataFrame
 from sklearn import metrics
-import matplotlib.pyplot as plt
-import seaborn as sns
 import scipy.stats as st
 from collections import defaultdict
-        
+
 def df_get_cdf(df,X,Y,ascending=True):
     def zero():
         return 0
@@ -21,8 +19,8 @@ def df_get_cdf(df,X,Y,ascending=True):
     # Y_arrary
     Y_arr = np.array(df_sort[Y])
     PY_arr = np.zeros(arr_len,dtype=float)
-    tmp_N = defaultdict(zero)
 
+    tmp_N = defaultdict(zero)
     for ind_,val_ in enumerate(Y_arr):
         PY_arr[ind_] = tmp_N[val_] + 1
         tmp_N[val_] += 1
@@ -33,6 +31,34 @@ def df_get_cdf(df,X,Y,ascending=True):
     
     return df_cdf.sort_values(by=[X],ascending=True).reset_index(drop=True)
 
+def df_get_cdf_(df,X,Y,ascending=True):
+    def zero():
+        return 0
+    # df sort 
+    df_sort = df.sort_values(by=[X],ascending=ascending).reset_index(drop=True)
+    arr_len = df_sort.shape[0]
+    feat_N = df_sort[Y].unique()
+    
+    # Y_arrary
+    Y_arr = np.array(df_sort[Y])
+    PY_arr = np.zeros((arr_len,feat_N.shape[0]),dtype=float)
+    columns = ["cdf(%s=%s)" %(Y,v) for i,v in enumerate(feat_N)]
+
+    tmp_N = defaultdict(zero)
+    for ind_,val_ in enumerate(Y_arr):
+        for fi_,fv_ in enumerate(feat_N):
+            if val_ == fv_:
+                tmp_N[fv_] += 1
+                PY_arr[ind_,fi_] = tmp_N[fv_]
+            else:
+                PY_arr[ind_,fi_] = tmp_N[fv_]
+                
+    for fi_,fv_ in enumerate(feat_N):
+        PY_arr[:,fi_] = PY_arr[:,fi_] / tmp_N[fv_]
+
+    df_cdf = pd.concat([df_sort,pd.DataFrame(PY_arr,columns=columns)],axis=1)
+    
+    return df_cdf.sort_values(by=[X],ascending=True).reset_index(drop=True)
 #%%
 if __name__ == "__main__":
     mu, sigma = 10, 5
@@ -43,124 +69,17 @@ if __name__ == "__main__":
     df_1['Y'] = 0
     df_2 = pd.DataFrame(s2,columns=["feat"]  )
     df_2['Y'] = 1
+    
     df = pd.concat([df_1,df_2],axis=0).reset_index(drop=True)
-    df_cdf1 = df_get_cdf(df, X="feat", Y="Y", ascending=True)
-    df_cdf2 = df_get_cdf(df, X="feat", Y="Y", ascending=False)
+    df_cdf = df_get_cdf(df, X="feat", Y="Y", ascending=True)
+    df_cdf_ = df_get_cdf_(df, X="feat", Y="Y", ascending=True)
+    df_cdf_["InfoGain_Y=1"] = df_cdf_["cdf(Y=1)"]*np.log2(df_cdf_["cdf(Y=1)"])
+    df_cdf_["InfoGain_Y=0"] = df_cdf_["cdf(Y=0)"]*np.log2(df_cdf_["cdf(Y=0)"])
+    df_cdf_["InfoGain_Y=0"] = df_cdf_["InfoGain_Y=0"].fillna(0)
     
-    sns.lineplot(data=df_cdf1, x="feat", y="Y_cdf", hue="Y", style="Y")
-    sns.lineplot(data=df_cdf2, x="feat", y="Y_cdf", hue="Y", style="Y")
-    plt.legend(loc="best")
-    plt.show()
-
-#%% cdf
-import pandas as pd
-import numpy as np
-import copy
-from collections import deque
-from pandas.core.frame import DataFrame
-from sklearn import metrics
-import matplotlib.pyplot as plt
-import seaborn as sns
-import scipy.stats as st
-
-#
-mu, sigma = 10, 5
-s1 = st.norm(mu, sigma).rvs(1000000)
-s2 = st.norm(mu-4, sigma+4).rvs(100000)
-
-df_1 = pd.DataFrame(s1,columns=["feat"]  )
-df_1['Y'] = 0
-df_2 = pd.DataFrame(s2,columns=["feat"]  )
-df_2['Y'] = 1
-
-df = pd.concat([df_1,df_2],axis=0).reset_index(drop=True)
-#
-feature_cols = [col for col in df.columns if col != 'Y']
-target_cols = [col for col in df.columns if col not in feature_cols]
-
-#
-def plot_feature_distribution(df1, df2, label1, label2, features,plot_rows,plot_cols):
-    i = 0
-    sns.set_style('whitegrid')
-    plt.figure()
-    fig, ax = plt.subplots(1,1,figsize=(12,7))
-
-    for feature in features:
-        i += 1
-        plt.subplot(plot_rows,plot_cols,i)
-        sns.distplot(df1[feature], hist=False,label=label1)
-        sns.distplot(df2[feature], hist=False,label=label2)
-        plt.xlabel(feature, fontsize=9)
-        locs, labels = plt.xticks()
-        plt.tick_params(axis='x', which='major', labelsize=6, pad=-6)
-        plt.tick_params(axis='y', which='major', labelsize=6)
-    plt.show();
-
-t0 = df.loc[df['Y'] == 0]
-t1 = df.loc[df['Y'] == 1]
-#features = df.columns.values[0]
-plot_feature_distribution(t0, t1, '0', '1', feature_cols,1,1)
-
-##%%
-#Input一個Feat & Label, 得到各點P(Y=1) - P(Y=0)的機率
-#若該值是正,代表該值域下1的樣本點比0多
-def PDF_func(dataframe,feature,start,end,step,FileName):
-    #initial
-    N = len(dataframe[feature])
-    seq = dataframe[feature].sort_values().reset_index(drop=True)
-    pdf_range = range(start,end,step)
+    sns.pairplot(df_cdf_.sample(n=1000),hue="Y")
     
-    tmp_pdframe = pd.DataFrame(
-            [sum((pdf_range[i-1]<seq ) & (seq<pdf_range[i]))/N for i in range(1,len(pdf_range))]
-            ,columns=['pdf'])
-    #N個數有N-1個區間
-    #區間長度:Index~Index+step
-    tmp_pdframe.index = pdf_range[:-1]
-    globals()['pdf_frame_'+str(FileName)] = tmp_pdframe
-    print("Done!File Name: pdf_frame_"+ str(FileName))
-
-PDF_func(df[df['Y']==1],'feat',int(min(df['feat'])),int(max(df['feat'])),1,'feat_1')
-PDF_func(df[df['Y']==0],'feat',int(min(df['feat'])),int(max(df['feat'])),1,'feat_0')
-
-pdf_diff = pdf_frame_feat_1-pdf_frame_feat_0
-#找出差異最大的區間
-
-#Create Feature
-df['pdf_diff_feat']=pdf_diff.loc[round(df['feat'])].reset_index(drop=True)
-
-#
-def CDF_func(dataframe,feature,start,end,step,FileName):
-    #initial
-    N = len(dataframe[feature])
-    seq = dataframe[feature].sort_values().reset_index(drop=True)
-    cdf_range = range(start,end,step)
-
-    tmp_cdframe = pd.DataFrame(
-            [sum(seq<value)/N for value in cdf_range],columns=['cdf'])
-    tmp_cdframe.index = cdf_range
-    
-    globals()['cdf_frame_'+str(FileName)] = tmp_cdframe
-    print("Done!File Name: cdf_frame_"+ str(FileName))
-
-CDF_func(df[df['Y']==1],'feat',int(min(df['feat']))-2,int(max(df['feat']))+2,1,'feat_1')
-CDF_func(df[df['Y']==0],'feat',int(min(df['feat']))-2,int(max(df['feat']))+2,1,'feat_0')
-
-cdf_div_10 = cdf_frame_feat_1/cdf_frame_feat_0
-cdf_div_01 = cdf_frame_feat_0/cdf_frame_feat_1
-
-cdf_feat = cdf_div_10+cdf_div_01
-
-#Create Feature
-df['cdf_div_feat']=cdf_feat.loc[round(df['feat'])].reset_index(drop=True)
-
-
-
-
-
-
-
-###########################
-#
+#%% xgb
 import xgboost as xgb
 param = {'max_depth': 8,
          'learning_rate ': 0.02,
