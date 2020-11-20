@@ -1,3 +1,4 @@
+#%%
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,30 +9,8 @@ from pandas.core.frame import DataFrame
 from sklearn import metrics
 import scipy.stats as st
 from collections import defaultdict
-
+#%%
 def df_get_cdf(df,X,Y,ascending=True):
-    def zero():
-        return 0
-    # df sort 
-    df_sort = df.sort_values(by=[X],ascending=ascending).reset_index(drop=True)
-    arr_len = df_sort.shape[0]
-    
-    # Y_arrary
-    Y_arr = np.array(df_sort[Y])
-    PY_arr = np.zeros(arr_len,dtype=float)
-
-    tmp_N = defaultdict(zero)
-    for ind_,val_ in enumerate(Y_arr):
-        PY_arr[ind_] = tmp_N[val_] + 1
-        tmp_N[val_] += 1
-    for ind_,val_ in enumerate(Y_arr):
-        PY_arr[ind_] = PY_arr[ind_] / tmp_N[val_]
-
-    df_cdf = pd.concat([df_sort,pd.DataFrame(PY_arr,columns=["%s_cdf"%Y])],axis=1)
-    
-    return df_cdf.sort_values(by=[X],ascending=True).reset_index(drop=True)
-
-def df_get_cdf_(df,X,Y,ascending=True):
     def zero():
         return 0
     # df sort 
@@ -69,46 +48,13 @@ if __name__ == "__main__":
     df_1['Y'] = 0
     df_2 = pd.DataFrame(s2,columns=["feat"]  )
     df_2['Y'] = 1
-    
     df = pd.concat([df_1,df_2],axis=0).reset_index(drop=True)
+    
     df_cdf = df_get_cdf(df, X="feat", Y="Y", ascending=True)
-    df_cdf_ = df_get_cdf_(df, X="feat", Y="Y", ascending=True)
-    df_cdf_["InfoGain_Y=1"] = df_cdf_["cdf(Y=1)"]*np.log2(df_cdf_["cdf(Y=1)"])
-    df_cdf_["InfoGain_Y=0"] = df_cdf_["cdf(Y=0)"]*np.log2(df_cdf_["cdf(Y=0)"])
-    df_cdf_["InfoGain_Y=0"] = df_cdf_["InfoGain_Y=0"].fillna(0)
+    #df_cdf['cdf_delta'] = df_cdf["cdf(Y=1)"] - df_cdf["cdf(Y=0)"]
+    #df_cdf["InfoGain_Y=1"] = df_cdf["cdf(Y=1)"]*np.log2(df_cdf["cdf(Y=1)"])
+    #df_cdf["InfoGain_Y=0"] = df_cdf["cdf(Y=0)"]*np.log2(df_cdf["cdf(Y=0)"])
+    #df_cdf["InfoGain_Y=0"] = df_cdf["InfoGain_Y=0"].fillna(0)
     
-    sns.pairplot(df_cdf_.sample(n=1000),hue="Y")
+    sns.pairplot(df_cdf.sample(n=1000),hue="Y")
     
-#%% xgb
-import xgboost as xgb
-param = {'max_depth': 8,
-         'learning_rate ': 0.02,
-         'silent': 1,
-         'objective': 'binary:logistic',
-         "eval_metric":"auc"
-         #"scale_pos_weight":10,
-         #"subsample":0.9,
-         #"min_child_weight":5,
-          }
-
-x_col=['feat','pdf_diff_feat','cdf_div_feat']
-train_X = df[x_col]
-
-y_col=['Y']
-train_Y = df[y_col]
-
-dtrain = xgb.DMatrix(train_X,label=train_Y)
-
-cv_res= xgb.cv(param,
-               dtrain,
-               num_boost_round=1000,#830
-               early_stopping_rounds=10,
-               nfold=3, metrics='logloss',show_stdv=True)
-
-print(cv_res)
-
-#cv_res.shape[0]為最佳迭代次?
-bst = xgb.train(param,dtrain,num_boost_round=cv_res.shape[0])
-bst.get_score(importance_type='gain')
-
-
