@@ -64,22 +64,20 @@ def rolling_target_encode(df,
        
     # rolling prob
     df = df.sort_values(df_seq_col, ascending=True, na_position='first')
-    df_rolling = rolling_prob(df, df_seq_col, df_cla_col, cla_pos, 
-                              col_newname = 'rolling_prob')
+    col_name1 = 'P(%s-roll)' %df_seq_col
+    df_rolling = rolling_prob(df, df_seq_col, df_cla_col, cla_pos, col_name1)
 
     #rolling cond prob
+    col_name2 = 'P(%s-roll | %s=%s)' %(df_seq_col,df_tar_col,cla_pos)
     df = df.sort_values([df_tar_col,df_seq_col], ascending=True, na_position='first')
     df_rolling = df_rolling.groupby(df_tar_col)\
-                           .apply(rolling_prob,
-                                  df_seq_col,
-                                  df_cla_col,
-                                  cla_pos,
-                                  'rolling_tar_prob')
+                           .apply(rolling_prob,df_seq_col,df_cla_col, cla_pos, col_name2)
         
     #rolling target encode
+    col_newname = '%s'%Target_lambda + col_name1 + ' + %s'%(1-Target_lambda) + col_name2
     df_rolling[col_newname] = \
-        Target_lambda*df_rolling['rolling_prob'] \
-        + (1-Target_lambda)*df_rolling['rolling_tar_prob']
+        Target_lambda*df_rolling[col_name1] \
+        + (1-Target_lambda)*df_rolling[col_name2]
 
     return df_rolling
 
@@ -101,14 +99,18 @@ if __name__ == "__main__":
            ['C',3,1,True,True,True,True,True,12],
            ['A',5,1,True,True,True,True,False,-1],
            ['D',2,1,True,True,False,True,True,15]]
-    df = pd.DataFrame(tmp,columns = ['tar','seq','cla','var_4','var_5',
+    df = pd.DataFrame(tmp,columns = ['X','seq','Y','var_4','var_5',
                                      'var_6','var_7','var_8','var_9'])
     df_rolling_target = rolling_target_encode(\
                           df,
-                          df_tar_col = 'tar',
+                          df_tar_col = 'X',
                           df_seq_col = 'seq',
-                          df_cla_col = 'cla',
+                          df_cla_col = 'Y',
                           cla_pos = 1,
                           Target_lambda = 0.5,
                           col_newname = 'rolling_tar_encode'\
                       ).reset_index(drop=True)
+
+
+
+ 
