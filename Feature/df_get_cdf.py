@@ -21,7 +21,7 @@ def df_get_cdf(df,X,Y,ascending=True):
     # Y_arrary
     Y_arr = np.array(df_sort[Y])
     PY_arr = np.zeros((arr_len,feat_N.shape[0]),dtype=float)
-    columns = ["cdf(%s=%s)" %(Y,v) for i,v in enumerate(feat_N)]
+    columns = ["%s_cdf(%s=%s)" %("As" if ascending==True else "Des",Y,v) for i,v in enumerate(feat_N)]
 
     tmp_N = defaultdict(zero)
     for ind_,val_ in enumerate(Y_arr):
@@ -51,10 +51,11 @@ if __name__ == "__main__":
     df = pd.concat([df_1,df_2],axis=0).reset_index(drop=True)
     
     df_cdf = df_get_cdf(df, X="feat", Y="Y", ascending=True)
-    #df_cdf['cdf_delta'] = df_cdf["cdf(Y=1)"] - df_cdf["cdf(Y=0)"]
-    #df_cdf["InfoGain_Y=1"] = df_cdf["cdf(Y=1)"]*np.log2(df_cdf["cdf(Y=1)"])
-    #df_cdf["InfoGain_Y=0"] = df_cdf["cdf(Y=0)"]*np.log2(df_cdf["cdf(Y=0)"])
-    #df_cdf["InfoGain_Y=0"] = df_cdf["InfoGain_Y=0"].fillna(0)
+    #df_cdf = df_get_cdf(df_cdf, X="feat", Y="Y", ascending=False)
+    #df_cdf['cdf_delta'] = df_cdf["Des_cdf(Y=1)"] - df_cdf["As_cdf(Y=0)"]
+    df_cdf["InfoGain_Y=1"] = df_cdf["As_cdf(Y=1)"]*np.log2(df_cdf["As_cdf(Y=1)"])
+    df_cdf["InfoGain_Y=0"] = df_cdf["As_cdf(Y=0)"]*np.log2(df_cdf["As_cdf(Y=0)"])
+    df_cdf["InfoGain_Y=0"] = df_cdf["InfoGain_Y=0"].fillna(0)
     
-    sns.pairplot(df_cdf.sample(n=1000),hue="Y")
+    #sns.pairplot(df_cdf.sample(n=1000),hue="Y")
     
