@@ -1,3 +1,4 @@
+
 #%% Rolling Target Encoding
 import pandas as pd
 import numpy as np
@@ -100,34 +101,6 @@ def rolling_target_encode(df,
 
     return df_rolling
 
-#%% main
-if __name__ == "__main__":
-    '''
-    tmp = [['A',1,1,False,True,True,True,True,-5],
-           ['B',3,0,False,True,True,False,False,8],
-           ['C',2,1,False,True,False,True,False,11],
-           ['B',2,1,True,False,True,True,False,7],
-           ['A',2,1,True,False,True,True,True,-4],
-           ['C',4,0,False,False,True,True,False,13],
-           ['B',4,0,True,True,False,True,True,9],
-           ['C',1,1,True,True,True,True,False,10],
-           ['A',6,0,False,True,True,True,False,0],
-           ['D',1,0,True,False,False,True,False,14],
-           ['B',1,0,True,True,True,True,False,6],
-           ['A',3,1,True,True,False,True,True,-3],
-           ['A',4,0,True,True,True,False,True,-2],
-           ['C',3,1,True,True,True,True,True,12],
-           ['A',5,1,True,True,True,True,False,-1],
-           ['D',2,1,True,True,False,True,True,15]]
-    df = pd.DataFrame(tmp,columns = ['tar','seq','cla','var_4','var_5',
-                                     'var_6','var_7','var_8','var_9'])
-    '''
-    
-    PATH = r'C:/Users/w9012158/Desktop/自主研究/理賠客戶潛力分析/DATA/'
-    FILE = 'BUNDLE_REFLAG_INFO_F2_FIN3_01_12_2.csv'
-    CSV_READ = open(PATH+FILE,encoding='mbcs')
-    data = pd.read_csv(CSV_READ,converters = {u'code':str},dtype=str)
-    CSV_READ.close() 
     
 #%%    
 if __name__ == "__main__":
@@ -149,5 +122,3 @@ if __name__ == "__main__":
                           Target_lambda = 0.5,
                           col_newname = 'rolling_tar_encode'\
                       ).reset_index(drop=True)
-
-
