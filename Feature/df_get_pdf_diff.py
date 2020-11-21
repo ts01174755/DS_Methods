@@ -30,14 +30,14 @@ def df_get_pdf_diff(df, feature, cla_col, cla_val,Interval):
 
     df_pdf1 = PDF_func(df[df[cla_col]==cla_val],
                        feature,
-                       df[feature].min().astype(int),
-                       df[feature].max().astype(int),
+                       int(df[feature].min()),
+                       int(df[feature].max()),
                        Interval)
     
     df_pdf2 = PDF_func(df[df[cla_col]!=cla_val],
                        feature,
-                       df[feature].min().astype(int),
-                       df[feature].max().astype(int),
+                       int(df[feature].min()),
+                       int(df[feature].max()),
                        Interval)
 
     pdf_diff = df_pdf1 - df_pdf2
