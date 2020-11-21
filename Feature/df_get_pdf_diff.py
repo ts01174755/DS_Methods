@@ -27,7 +27,7 @@ def df_get_pdf_diff(df, feature, cla_col, cla_val,Interval):
         #區間長度:Index~Index+Interval
         tmp_pdframe.index = pdf_range[:-1]
         return tmp_pdframe
-    print(int(df[feature].min()))
+
     df_pdf1 = PDF_func(df[df[cla_col]==cla_val],
                        feature,
                        df[feature].min(),
