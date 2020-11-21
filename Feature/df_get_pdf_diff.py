@@ -21,7 +21,7 @@ def df_get_pdf_diff(df, feature, cla_col, cla_val,Interval):
         pdf_range = range(start,end,Interval)
        
         tmp_pdframe = pd.Series(
-                [sum((pdf_range[i-1]<seq ) & (seq<pdf_range[i]))/N for i in range(1,len(pdf_range))]
+                [sum((pdf_range[i-1]<=seq ) & (seq<pdf_range[i]))/N for i in range(1,len(pdf_range))]
                 ,name='pdf')
         #N個數有N-1個區間
         #區間長度:Index~Index+Interval
