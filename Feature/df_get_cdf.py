@@ -37,7 +37,7 @@ def df_get_cdf(df,X,Y,ascending=True):
 
     df_cdf = pd.concat([df_sort,pd.DataFrame(PY_arr,columns=columns)],axis=1)
     
-    return df_cdf.sort_values(by=[X],ascending=True).reset_index(drop=True)
+    return df_cdf
 #%%
 if __name__ == "__main__":
     mu, sigma = 10, 5
