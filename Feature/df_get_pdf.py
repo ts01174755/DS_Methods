@@ -9,11 +9,11 @@ from pandas.core.frame import DataFrame
 from sklearn import metrics
 import scipy.stats as st
 from collections import defaultdict
-from scipy.interpolate import interp1d
 import math
-
+from scipy.interpolate import interp1d
+from scipy.interpolate import PchipInterpolator
 #%%
-def df_get_pdf(df,X,Y,X_len,delta=None):
+def df_get_pdf(df,X,Y,X_len,delta=None,CDF_Monotonic=True):
     def feature_cdf(df,X,Y,ascending=True):
         def zero():
             return 0    
@@ -52,7 +52,10 @@ def df_get_pdf(df,X,Y,X_len,delta=None):
         X_Y[0,1] = 0
         X_Y[-1,1] = 1
 
-        func_ = interp1d(X_Y[:,0], X_Y[:,1], kind = 'quadratic')
+        if CDF_Monotonic == True:
+            func_ = PchipInterpolator(X_Y[:,0], X_Y[:,1])
+        else:
+            func_ = interp1d(X_Y[:,0], X_Y[:,1], kind = 'quadratic')
         return func_, X_Y[-2,0] - X_Y[-3,0]
     
     df_sort = df.sort_values(by=[X]).reset_index(drop=True)
@@ -100,14 +103,18 @@ if __name__ == "__main__":
     df = pd.concat([df_1,df_2],axis=0).reset_index(drop=True)
     
     # df_get_pdf
-    df_pdf = df_get_pdf(df, X='feat', Y='Y', X_len=1, delta=.1)
+    df_pdf = df_get_pdf(df, X='feat', Y='Y', X_len=.1, delta=.1,CDF_Monotonic=True)
     df_pdf['pdf_diff'] = df_pdf['pdf(Y=1)'] - df_pdf['pdf(Y=0)']
 
+    plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
+    plt.hist(df.loc[df['Y']==0,'feat'],bins=70,density=True)
+    plt.hist(df.loc[df['Y']==1,'feat'],bins=70,density=True)
+    plt.show()
     #plt
     plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
     plt.plot(df_pdf['feat'],df_pdf['pdf(Y=1)'],'-',color = 'r', label="pdf(Y=1)")
     plt.plot(df_pdf['feat'],df_pdf['pdf(Y=0)'],'-',color = 'g', label="pdf(Y=0)")
-    plt.plot(df_pdf['feat'],df_pdf['pdf_diff'],'-',color = 'b', label="pdf_diff")
+    #plt.plot(df_pdf['feat'],df_pdf['pdf_diff'],'-',color = 'b', label="pdf_diff")
     
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
@@ -119,4 +126,3 @@ if __name__ == "__main__":
     # 顯示出線條標記位置
     plt.legend(loc = "best", fontsize=20)
     plt.show()
-    
