@@ -21,7 +21,7 @@ def df_get_cdf(df,X,Y,ascending=True):
     # Y_arrary
     Y_arr = np.array(df_sort[Y])
     PY_arr = np.zeros((arr_len,feat_N.shape[0]),dtype=float)
-    columns = ["%s_cdf(%s=%s)" %("As" if ascending==True else "Des",Y,v) for i,v in enumerate(feat_N)]
+    columns = ["%s_cdf(%s=%s)" %("As" if ascending==True else "Ds",Y,v) for i,v in enumerate(feat_N)]
 
     tmp_N = defaultdict(zero)
     for ind_,val_ in enumerate(Y_arr):
