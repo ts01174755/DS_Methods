@@ -70,20 +70,18 @@ def df_get_pdf(df,X,Y,X_len,delta=None,CDF_Monotonic=True):
     feat_cdf = feature_cdf(df_sort, X=X, Y=Y)
     cols = feat_cdf.columns    
             
-    df_sort[X] = df_sort[X] - X_len/2
     if delta == None:
         delta = X_len/2
-    
+        
+    X_delta1 = feat_X - X_len/2 + delta
+    X_delta2 = feat_X - X_len/2 - delta
     for col in cols:
         XY_func,delta_tmp = get_interfunc(feat_cdf,col)
-        delta = delta_tmp if delta_tmp < delta else delta
-        X_delta1 = feat_X + delta
-        X_delta2 = feat_X - delta
-
         Y_delta1 = XY_func(X_delta1)
         Y_delta2 = XY_func(X_delta2)
-    
         df_sort['pdf' + col[6:]] = (Y_delta2 - Y_delta1 ) /(X_delta2 - X_delta1)
+    
+    df_sort[X] = feat_X - X_len/2
     
     return df_sort
 
@@ -102,7 +100,7 @@ if __name__ == "__main__":
     df = pd.concat([df_1,df_2],axis=0).reset_index(drop=True)
     
 #%%
-X_len = 5
+X_len = 1
 delta = .5
 X = 'feat'
 Y = 'Y'
