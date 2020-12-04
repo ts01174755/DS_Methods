@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d, Axes3D
+
 # plt-3D
 train['3D_axis1'] = train.loc[:,['open_count_last_10_days']]
 train['3D_axis2'] = train.loc[:,['open_count_last_30_days']]
