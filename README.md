@@ -28,18 +28,18 @@ Ethan - [Github](https://github.com/CubatLin "Github")
 - 《2019 autumn E.Sun Bank AI open competition- credit card fraud detection》:
 
 ```
-- 2nd of final selected 20 teams in business solutions competition.
-- Led team of 5 to achieve top 1%(15/1366) in F1 score predict competition.
+隊名：台灣梯度下降第一品牌
+1. 2nd of final selected 20 teams in business solutions competition.   
+2. Top 1%(15/1366) in F1 score predict competition.
 ```
 
 - 《2020 Shopee Code League- series of Kaggle competition in Asia-Pacific(open category)》
 
 ```
-- 15th in Sentiment Analysis(NLP task).
-- 23th in Product Title Translation(NLP task, BLEU score: 40.5).
-- 23th in Marketing Analytics(Recommendation forecasting task).
-- 47th in Order Brushing(accuracy:0.9779).
-- 67th, score 0.81 accuracy in Product Detection(Computer Vision task).
+隊名：在蝦皮中叫外賣是否搞錯了什麼
+1. 14th in Sentiment Analysis(NLP task).
+2. 34th in Product Title Translation(NLP task).
+3. 38th in Marketing Analytics(Recommendation forecasting task).
 ```
 
 :point_right:本次排名....
