@@ -12,7 +12,9 @@
 
 ## 宣傳一下...
 Kaggle: [Shopee challenge 2020 - User Spending Prediction](https://www.kaggle.com/c/iamthebestcoderopen2020/overview "Shopee challenge 2020")
+
 隊名:台灣梯度下降第一品牌
+
 :trophy:以往成績：
 
 - 《2019 autumn E.Sun Bank AI open competition- credit card fraud detection》:
