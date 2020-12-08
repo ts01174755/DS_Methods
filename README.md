@@ -16,18 +16,26 @@ Kaggle: [Shopee challenge 2020 - User Spending Prediction](https://www.kaggle.co
 :trophy:以往成績：
 
 - 《2019 autumn E.Sun Bank AI open competition- credit card fraud detection》:
+
   2nd of final selected 20 teams in business solutions competition.
+  
   Led team of 5 to achieve top 1%(15/1366) in F1 score predict competition.
 
 - 《2020 Shopee Code League- series of Kaggle competition in Asia-Pacific(open category)》
+
   15th in Sentiment Analysis(NLP task).
+  
   23th in Product Title Translation(NLP task, BLEU score: 40.5).
+  
   23th in Marketing Analytics(Recommendation forecasting task).
+  
   47th in Order Brushing(accuracy:0.9779).
+  
   67th, score 0.81 accuracy in Product Detection(Computer Vision task).
 
 :point_right:本次排名....
 - 《I'm the Best Coder! Challenge 2020(open category)》
+
   5th in User Spending Prediction.
 
   ![Shopee challenge 2020 - 5th](/Users/wupeiyu/Desktop/Shopee challenge 2020 - 5th.png)
@@ -100,12 +108,16 @@ Data_balance(no)->Data_resampling->Data_train
 
 ### Module Selection
 唯一支持 XGBoost!!
+
 不知道的 Boosting 原理的童鞋們，請參考周志華教授所撰寫的西瓜書。
+
 如果要我用一句話來表示Boosting，它就是個 **可以把 "渣渣"模型變成 "我就是屌"模型(周杰倫?)...**的算法。
 
 ## 心得
 打過幾次比賽後開始體認到Machine Learning是一個完整的資料分析框架，已經成為做Data的必備技能：清晰的資料處理邏輯、運用Feature engineering & Domain Knowledge製作變數、變數好壞評估、模型選擇...等。
+
 **以上技能是必備，更要滿足輕量、快速部署、算法效率/效能高要求...等要求**，如何達到？刷些leetcode，然後做出自己的Pipeline吧！
+
 面對資料如同面對疫情一樣，**超前部署**是一定要做的事情了。
 
 ## 聯絡方式
