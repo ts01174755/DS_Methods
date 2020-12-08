@@ -15,6 +15,13 @@ Kaggle: [Shopee challenge 2020 - User Spending Prediction](https://www.kaggle.co
 
 隊名:台灣梯度下降第一品牌
 
+隊員:
+
+Ethan - [Github](https://github.com/CubatLin "Github")
+
+我 - [Github](https://github.com/ts01174755 "Github")
+
+
 :trophy:以往成績：
 
 - 《2019 autumn E.Sun Bank AI open competition- credit card fraud detection》:
@@ -123,4 +130,4 @@ Data_balance(no)->Data_resampling->Data_train
 面對資料如同面對疫情一樣，**超前部署**是一定要做的事情了。
 
 ## 聯絡方式
-我的Github - [WPU](https://github.com/ts01174755 "Github")
+
