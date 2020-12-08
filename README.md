@@ -40,7 +40,7 @@ Kaggle: [Shopee challenge 2020 - User Spending Prediction](https://www.kaggle.co
 
   5th in User Spending Prediction.
 
-  ![Shopee challenge 2020 - 5th](/Users/wupeiyu/Desktop/Shopee challenge 2020 - 5th.png)
+  ![Shopee challenge 2020 - 5th](https://github.com/ts01174755/Competition/blob/main/Shopee%20challenge%202020%20-%20Flow.jpg)
 
 ## 賽前準備工作 - Pipeline白板
 Pipeline 白板很重要，它可以幫助我們在面臨未知問題時能節省大量工作，我們拿Shopee Challenge 2019 - Marketing Analytics 的資料做為假想資料，並考慮各種特殊情況下產出Pipeline白板。
