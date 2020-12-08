@@ -3,12 +3,12 @@
 [![Shopee challenge 2020 - I'm the best coder](https://imgur.dcard.tw/sXkKnDd.jpg "Shopee challenge 2020 - I'm the best coder")](https://imgur.dcard.tw/sXkKnDd.jpg "Shopee challenge 2020 - I'm the best coder")
 
 > 本次比賽主辦方給了兩個月的準備期，但是**實際比賽時長只給兩個小時(當場出題目)**，非常考驗 Coder 的基本功:
-1. Data processing
-2. EDA
-3. Feature engineering & Domain Knowledge
-4. Data resampling
-5. Module Selection
-###### 加分項:Sampling、Leakage 洞察、環境選擇
+> 1. Data processing
+> 2. EDA
+> 3. Feature engineering & Domain Knowledge
+> 4. Data resampling
+> 5. Module Selection
+> ###### 加分項:Sampling、Leakage 洞察、環境選擇
 
 ## 宣傳一下...
 Kaggle: [Shopee challenge 2020 - User Spending Prediction](https://www.kaggle.com/c/iamthebestcoderopen2020/overview "Shopee challenge 2020")
